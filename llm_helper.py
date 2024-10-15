@@ -4,8 +4,10 @@ load_dotenv()
 import os
 import json
 import requests
+from PIL import Image
+from io import BytesIO
     
-def llama32(prompt_or_messages, temperature=0, model_size=11):
+def llama32(prompt_or_messages, temperature=0, model_size=90):
   model = f"meta-llama/Llama-3.2-{model_size}B-Vision-Instruct-Turbo"
   url = f"{os.getenv('DLAI_TOGETHER_API_BASE', 'https://api.together.xyz')}/v1/chat/completions"
   payload = {
@@ -149,3 +151,29 @@ def generate_summary(title, model, inform, temperature):
         return '', '', '', '', ''
     
     return summary_res, author_res, year_res, venue_res, github_res
+
+def show_image(img_url):
+    if img_url.startswith("http://") or img_url.startswith("https://"):
+        response = requests.get(img_url)
+        img = Image.open(BytesIO(response.content))
+    else:
+        img = Image.open(img_url)
+    return img
+        
+def generate_description(img_prompt, img_url):
+    prompt = [
+        {
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": img_prompt
+                },
+            {
+                "type": "image_url",
+                "image_url": {"url": img_url}
+            }
+        ]
+        },
+    ]
+    return show_image(img_url), llama32(prompt, 0, 90)

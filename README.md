@@ -4,7 +4,8 @@ An offline web application using [gradio](https://www.gradio.app/) and the LLM L
 
 ## :collision: Demo :collision:
 
-![Demo with paper Yolov7](docs/demo.gif)
+![Demo 1](docs/demo1.gif)
+![Demo 2](docs/demo2.gif)
 
 ## :hammer_and_wrench: Installation :hammer_and_wrench:
 
